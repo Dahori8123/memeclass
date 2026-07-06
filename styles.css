@@ -3,16 +3,48 @@
 html, body {
     overflow-x: hidden;
     max-width: 100%;
-    background-color: #f5f3ff; /* Fondo pastel suave detrás del GIF */
 }
 
-/* Fondo con GIF animado */
-.bg-gif {
-    background-image: url('background.gif');
+/* Background Gradient Animation */
+.bg-gradient {
+    background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    background: linear-gradient(-45deg, #d8b4e2, #f8c2d4, #a9cce3, #a2d9ce);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Panel de Login/Registro con fondo GIF */
+#auth-view {
+    position: relative;
+    overflow: hidden;
+}
+
+#auth-view.glass-panel {
+    background: rgba(255, 255, 255, 0.15); /* Más translúcido para ver el GIF */
+}
+
+#auth-view::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('card-bg.gif');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.6; /* Opacidad al 60% (40% de transparencia) */
+    opacity: 0.6; /* 60% de opacidad para el GIF */
+    z-index: 0;
+}
+
+/* Asegurar que el contenido del formulario quede sobre el GIF */
+#auth-view > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* Floating Clouds */
