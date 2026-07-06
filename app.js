@@ -217,10 +217,8 @@ async function uploadToDrive(file) {
 
 // Auth Tab Switching Logic
 document.getElementById('tab-login').addEventListener('click', (e) => {
-    e.target.classList.replace('text-gray-500', 'text-purple-700');
-    e.target.classList.add('border-b-2', 'border-purple-500');
-    document.getElementById('tab-register').classList.replace('text-purple-700', 'text-gray-500');
-    document.getElementById('tab-register').classList.remove('border-b-2', 'border-purple-500');
+    document.getElementById('tab-login').classList.add('active');
+    document.getElementById('tab-register').classList.remove('active');
     
     document.getElementById('login-form').classList.remove('hidden');
     document.getElementById('register-form').classList.add('hidden');
@@ -228,10 +226,8 @@ document.getElementById('tab-login').addEventListener('click', (e) => {
 });
 
 document.getElementById('tab-register').addEventListener('click', (e) => {
-    e.target.classList.replace('text-gray-500', 'text-purple-700');
-    e.target.classList.add('border-b-2', 'border-purple-500');
-    document.getElementById('tab-login').classList.replace('text-purple-700', 'text-gray-500');
-    document.getElementById('tab-login').classList.remove('border-b-2', 'border-purple-500');
+    document.getElementById('tab-register').classList.add('active');
+    document.getElementById('tab-login').classList.remove('active');
     
     document.getElementById('register-form').classList.remove('hidden');
     document.getElementById('login-form').classList.add('hidden');
