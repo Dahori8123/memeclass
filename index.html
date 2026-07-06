@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemeClass - Aprende con Memes</title>
+    
+    <!-- Google Fonts: DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Play CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            purple: '#d8b4e2',
+                            pink: '#f8c2d4',
+                            blue: '#a9cce3',
+                            green: '#a2d9ce'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="font-sans antialiased text-gray-800 overflow-hidden relative min-h-screen">
+
+    <!-- Background Elements -->
+    <div class="bg-gradient fixed inset-0 z-0"></div>
+    <div class="cloud cloud-1 z-0"></div>
+    <div class="cloud cloud-2 z-0"></div>
+
+    <!-- DVD Bounce Container -->
+    <div id="dynamic-memes-container" class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <!-- Default sample bouncing elements will be injected here if no data -->
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 container mx-auto h-screen flex flex-col justify-center items-center p-4" id="app-root">
+        
+        <!-- Auth View (Visible by default) -->
+        <div id="auth-view" class="glass-panel p-8 w-full max-w-md transition-all duration-300">
+            <h1 class="text-4xl font-bold text-center mb-6 text-purple-900">MemeClass ✨</h1>
+            
+            <!-- Tabs -->
+            <div class="flex mb-6 border-b border-purple-200">
+                <button id="tab-login" class="flex-1 py-2 font-medium text-purple-700 border-b-2 border-purple-500">Iniciar Sesión</button>
+                <button id="tab-register" class="flex-1 py-2 font-medium text-gray-500 hover:text-purple-600 transition-colors">Crear Cuenta</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                    <input type="text" id="login-username" required class="w-full px-4 py-2 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-shadow">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <input type="password" id="login-password" required class="w-full pl-4 pr-10 py-2 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-shadow">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-purple-700 focus:outline-none toggle-password" data-target="login-password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3 mt-4 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95">
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Register Form (Hidden by default) -->
+            <form id="register-form" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                    <input type="text" id="reg-username" required class="w-full px-4 py-2 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-shadow">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <input type="password" id="reg-password" required placeholder="(Usa la maestra para ser profe)" class="w-full pl-4 pr-10 py-2 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 transition-shadow">
+                        <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-purple-700 focus:outline-none toggle-password" data-target="reg-password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Foto de Perfil (Opcional)</label>
+                    <input type="file" id="reg-pfp" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-purple-100 file:text-purple-700 hover:file:bg-purple-200 transition-colors">
+                </div>
+                <button type="submit" id="reg-submit-btn" class="w-full py-3 mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 flex justify-center items-center">
+                    <span>Registrarse</span>
+                </button>
+            </form>
+            
+            <div id="auth-error" class="mt-4 text-center text-red-500 text-sm hidden font-medium"></div>
+        </div>
+
+        <!-- Main App View (Hidden by default) -->
+        <div id="app-view" class="w-full max-w-5xl h-[90vh] hidden flex flex-col gap-4">
+            
+            <!-- Navbar -->
+            <nav class="glass-panel px-6 py-4 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div id="nav-pfp-container" class="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md bg-gray-200">
+                        <img id="nav-pfp" src="" class="w-full h-full object-cover hidden">
+                        <div id="nav-pfp-status" class="absolute inset-0 bg-black/50 flex items-center justify-center text-xs text-white font-bold hidden">⏳</div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Hola, <span id="nav-username" class="text-purple-600">Usuario</span></h2>
+                        <span id="nav-role" class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">Rol</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="btn-toggle-view" class="hidden px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-bold rounded-xl transition-colors shadow-md">
+                        Vista Profesor
+                    </button>
+                    <button id="btn-logout" class="px-4 py-2 bg-red-400 hover:bg-red-500 text-white text-sm font-bold rounded-xl transition-colors shadow-md">
+                        Salir
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Dynamic Content Area -->
+            <div id="content-area" class="flex-1 overflow-hidden relative">
+                <!-- Templates will be injected here -->
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- TEMPLATES -->
+
+    <!-- Student View Template -->
+    <template id="student-template">
+        <div class="flex flex-col md:flex-row gap-4 h-full">
+            <!-- Consult Form Panel -->
+            <div class="glass-panel p-6 w-full md:w-1/3 flex flex-col shrink-0 overflow-y-auto">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Nueva Consulta ✍️</h3>
+                <form id="consult-form" class="flex flex-col gap-4 flex-1">
+                    <textarea id="consult-text" required placeholder="Escribe tu duda aquí..." class="w-full flex-1 min-h-[150px] p-4 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
+                    
+                    <div class="space-y-2 bg-white/30 p-3 rounded-xl border border-white/40">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="chk-image" class="w-4 h-4 text-blue-500 rounded focus:ring-blue-400">
+                            <span class="text-sm font-medium text-gray-700">Adjuntar una imagen 📷</span>
+                        </label>
+                        <input type="file" id="file-image" accept="image/*" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700">
+                        
+                        <label class="flex items-center gap-2 cursor-pointer mt-2">
+                            <input type="checkbox" id="chk-meme" class="w-4 h-4 text-pink-500 rounded focus:ring-pink-400">
+                            <span class="text-sm font-medium text-gray-700">Quiero adjuntar un meme 🖼️</span>
+                        </label>
+                        <input type="file" id="file-meme" accept="image/*" class="hidden w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-pink-100 file:text-pink-700">
+                    </div>
+
+                    <button type="submit" id="consult-submit-btn" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 flex justify-center items-center">
+                        <span>Enviar Consulta</span>
+                    </button>
+                    <div id="consult-status" class="text-center text-sm font-medium hidden"></div>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-gray-200/50">
+                    <h4 class="font-bold text-gray-700 mb-2">Mi Perfil ⚙️</h4>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Cambiar Foto</label>
+                    <input type="file" id="update-pfp" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:bg-gray-200 file:text-gray-700 cursor-pointer">
+                    <div id="update-pfp-status" class="text-xs text-center mt-1 hidden"></div>
+                </div>
+            </div>
+
+            <!-- Queries List Panel -->
+            <div class="glass-panel p-6 w-full md:w-2/3 flex flex-col overflow-hidden">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Mis Consultas 📚</h3>
+                <div id="student-queries-list" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                    <!-- Queries injected here -->
+                    <div class="text-center text-gray-500 mt-10">Cargando consultas...</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Teacher View Template -->
+    <template id="teacher-template">
+        <div class="flex flex-col h-full gap-4">
+            
+            <!-- Moderation Panel -->
+            <div class="glass-panel bg-purple-100/40 border-purple-200 p-4 shrink-0 shadow-sm flex flex-col md:flex-row gap-4">
+                
+                <!-- Pending PFPs -->
+                <div class="flex-1 flex flex-col">
+                    <h3 class="text-lg font-bold text-purple-800 mb-2">Avatares Pendientes 👤</h3>
+                    <div id="pending-pfps-list" class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar min-h-[90px]">
+                        <div class="text-sm text-purple-600/70 italic my-auto">Todo al día ✨</div>
+                    </div>
+                </div>
+
+                <div class="w-px bg-purple-200/50 hidden md:block"></div>
+
+                <!-- Pending Memes -->
+                <div class="flex-1 flex flex-col">
+                    <h3 class="text-lg font-bold text-pink-800 mb-2">Memes Pendientes 🤡</h3>
+                    <div id="pending-memes-list" class="flex gap-3 overflow-x-auto pb-2 custom-scrollbar min-h-[90px]">
+                        <div class="text-sm text-pink-600/70 italic my-auto">Todo al día ✨</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- All Queries Panel -->
+            <div class="glass-panel p-6 flex-1 flex flex-col overflow-hidden">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">Todas las Consultas 📬</h3>
+                <div id="teacher-queries-list" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                    <!-- Queries injected here -->
+                    <div class="text-center text-gray-500 mt-10">Cargando consultas de alumnos...</div>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script src="app.js"></script>
+</body>
+</html>

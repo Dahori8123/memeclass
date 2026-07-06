@@ -1,0 +1,99 @@
+/* styles.css */
+
+/* Background Gradient Animation */
+.bg-gradient {
+    background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+    background: linear-gradient(-45deg, #d8b4e2, #f8c2d4, #a9cce3, #a2d9ce);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating Clouds */
+.cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    filter: blur(20px);
+    opacity: 0.6;
+    animation: floatCloud 25s infinite alternate ease-in-out;
+}
+
+.cloud-1 {
+    width: 400px;
+    height: 200px;
+    top: 10%;
+    left: -10%;
+    background: rgba(255, 255, 255, 0.5);
+    animation-duration: 30s;
+}
+
+.cloud-2 {
+    width: 300px;
+    height: 150px;
+    bottom: 20%;
+    right: -5%;
+    background: rgba(255, 255, 255, 0.4);
+    animation-duration: 20s;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes floatCloud {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(15vw, 10vh) scale(1.1); }
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    border-radius: 1.5rem; /* rounded-2xl */
+}
+
+/* Custom Scrollbar for inner lists */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.4); /* purple-500 equivalent */
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.6);
+}
+
+/* DVD Bouncing Item CSS */
+.dvd-item {
+    position: absolute;
+    will-change: transform;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.dvd-item img {
+    object-fit: cover;
+    background: white;
+}
+
+/* Auth view transitions */
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
