@@ -415,10 +415,14 @@ function initStudentView() {
 
         try {
             const text = document.getElementById('consult-text').value;
-            let imgUrl = '', memeUrl = '';
+            const imgUrls = [];
+            let memeUrl = '';
 
-            if (chkImage.checked && fileImage.files[0]) {
-                imgUrl = await uploadToDrive(fileImage.files[0]);
+            if (chkImage.checked && fileImage.files.length > 0) {
+                for (let i = 0; i < fileImage.files.length; i++) {
+                    const url = await uploadToDrive(fileImage.files[i]);
+                    imgUrls.push(url);
+                }
             }
             if (chkMeme.checked && fileMeme.files[0]) {
                 memeUrl = await uploadToDrive(fileMeme.files[0]);
@@ -427,7 +431,7 @@ function initStudentView() {
             const docData = {
                 pregunta: text,
                 fecha: new Date().toISOString(),
-                image_url: imgUrl,
+                image_urls: imgUrls,
                 meme_url: memeUrl,
                 meme_status: memeUrl ? 'pendiente' : 'none',
                 respuesta_profesor: '',
@@ -513,6 +517,17 @@ function initStudentView() {
                 responseHtml = `<span class="text-xs px-2 py-1 rounded-full font-bold bg-gray-200 text-gray-600 mt-2 inline-block">Sin respuesta aún</span>`;
             }
 
+            let imagesHtml = '';
+            if (data.image_urls && data.image_urls.length > 0) {
+                imagesHtml = `<div class="flex flex-wrap gap-2 mt-2">`;
+                data.image_urls.forEach(url => {
+                    imagesHtml += `<a href="${url}" target="_blank"><img src="${url}" class="max-h-32 rounded-lg border border-gray-200"></a>`;
+                });
+                imagesHtml += `</div>`;
+            } else if (data.image_url) {
+                imagesHtml = `<div class="mt-2"><a href="${data.image_url}" target="_blank"><img src="${data.image_url}" class="max-h-32 rounded-lg border border-gray-200"></a></div>`;
+            }
+
             el.innerHTML = `
                 <div class="flex justify-between items-start">
                     <p class="text-gray-800 text-sm whitespace-pre-wrap">${data.pregunta}</p>
@@ -521,8 +536,8 @@ function initStudentView() {
                         <span class="text-[10px] text-gray-400">${new Date(data.fecha).toLocaleDateString()}</span>
                     </div>
                 </div>
-                ${data.image_url ? `<img src="${data.image_url}" class="max-h-32 rounded-lg border border-gray-200 mt-2">` : ''}
-                ${data.meme_url ? `<img src="${data.meme_url}" class="max-h-32 rounded-lg border border-pink-200 mt-2">` : ''}
+                ${imagesHtml}
+                ${data.meme_url ? `<div class="mt-2"><a href="${data.meme_url}" target="_blank"><img src="${data.meme_url}" class="max-h-32 rounded-lg border border-pink-200"></a></div>` : ''}
                 ${responseHtml}
             `;
             qList.appendChild(el);
@@ -593,9 +608,21 @@ function initTeacherView() {
                     </div>
                 </div>
                 <p class="text-gray-800 text-sm whitespace-pre-wrap">${data.pregunta}</p>
-                <div class="flex gap-4">
-                    ${data.image_url ? `<div class="flex-1"><span class="text-xs text-gray-500 block mb-1">Imagen:</span><a href="${data.image_url}" target="_blank"><img src="${data.image_url}" class="max-h-24 rounded-lg border border-gray-200"></a></div>` : ''}
-                    ${data.meme_url ? `<div class="flex-1"><span class="text-xs text-pink-500 block mb-1">Meme (${data.meme_status}):</span><a href="${data.meme_url}" target="_blank"><img src="${data.meme_url}" class="max-h-24 rounded-lg border border-pink-200"></a></div>` : ''}
+                <div class="flex gap-4 flex-wrap">
+                    ${(() => {
+                        if (data.image_urls && data.image_urls.length > 0) {
+                            let list = `<div class="flex-1 min-w-[200px]"><span class="text-xs text-gray-500 block mb-1">Imágenes (${data.image_urls.length}):</span><div class="flex flex-wrap gap-2">`;
+                            data.image_urls.forEach(url => {
+                                list += `<a href="${url}" target="_blank"><img src="${url}" class="max-h-24 rounded-lg border border-gray-200"></a>`;
+                            });
+                            list += `</div></div>`;
+                            return list;
+                        } else if (data.image_url) {
+                            return `<div class="flex-1 min-w-[200px]"><span class="text-xs text-gray-500 block mb-1">Imagen:</span><a href="${data.image_url}" target="_blank"><img src="${data.image_url}" class="max-h-24 rounded-lg border border-gray-200"></a></div>`;
+                        }
+                        return '';
+                    })()}
+                    ${data.meme_url ? `<div class="flex-1 min-w-[200px]"><span class="text-xs text-pink-500 block mb-1">Meme (${data.meme_status}):</span><a href="${data.meme_url}" target="_blank"><img src="${data.meme_url}" class="max-h-24 rounded-lg border border-pink-200"></a></div>` : ''}
                 </div>
                 <div class="mt-4">
                     <textarea id="reply-${data.id}" class="w-full text-sm p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-400" placeholder="Escribe una respuesta...">${data.respuesta_profesor}</textarea>
