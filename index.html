@@ -35,7 +35,7 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="font-sans antialiased text-gray-800 overflow-hidden relative min-h-screen">
+<body class="font-sans antialiased text-gray-800 overflow-y-auto md:overflow-hidden relative min-h-screen">
 
     <!-- Background Elements -->
     <div class="bg-gradient fixed inset-0 z-0"></div>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Main Content Wrapper -->
-    <div class="relative z-10 container mx-auto h-screen flex flex-col justify-center items-center p-4" id="app-root">
+    <div class="relative z-10 container mx-auto min-h-screen md:h-screen flex flex-col justify-center items-center p-3 md:p-4" id="app-root">
         
         <!-- Auth View (Visible by default) -->
         <div id="auth-view" class="glass-panel p-8 w-full max-w-md transition-all duration-300">
@@ -108,7 +108,7 @@
         </div>
 
         <!-- Main App View (Hidden by default) -->
-        <div id="app-view" class="w-full max-w-5xl h-[90vh] hidden flex flex-col gap-4">
+        <div id="app-view" class="w-full max-w-5xl min-h-[90vh] md:h-[90vh] hidden flex flex-col gap-3 md:gap-4">
             
             <!-- Navbar -->
             <nav class="glass-panel px-6 py-4 flex justify-between items-center shrink-0">
@@ -122,11 +122,11 @@
                         <span id="nav-role" class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">Rol</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button id="btn-toggle-view" class="hidden px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-bold rounded-xl transition-colors shadow-md">
+                <div class="flex items-center gap-2 md:gap-4">
+                    <button id="btn-toggle-view" class="hidden px-2.5 py-1.5 md:px-4 md:py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-xs md:text-sm font-bold rounded-xl transition-colors shadow-md">
                         Vista Profesor
                     </button>
-                    <button id="btn-logout" class="px-4 py-2 bg-red-400 hover:bg-red-500 text-white text-sm font-bold rounded-xl transition-colors shadow-md">
+                    <button id="btn-logout" class="px-2.5 py-1.5 md:px-4 md:py-2 bg-red-400 hover:bg-red-500 text-white text-xs md:text-sm font-bold rounded-xl transition-colors shadow-md">
                         Salir
                     </button>
                 </div>
@@ -144,9 +144,9 @@
 
     <!-- Student View Template -->
     <template id="student-template">
-        <div class="flex flex-col md:flex-row gap-4 h-full">
+        <div class="flex flex-col md:flex-row gap-4 min-h-0 md:h-full overflow-y-auto md:overflow-y-hidden">
             <!-- Consult Form Panel -->
-            <div class="glass-panel p-6 w-full md:w-1/3 flex flex-col shrink-0 overflow-y-auto">
+            <div class="glass-panel p-4 md:p-6 w-full md:w-1/3 flex flex-col shrink-0 md:overflow-y-auto">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Nueva Consulta ✍️</h3>
                 <form id="consult-form" class="flex flex-col gap-4 flex-1">
                     <textarea id="consult-text" required placeholder="Escribe tu duda aquí..." class="w-full flex-1 min-h-[150px] p-4 rounded-xl border border-white/40 bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
@@ -180,7 +180,7 @@
             </div>
 
             <!-- Queries List Panel -->
-            <div class="glass-panel p-6 w-full md:w-2/3 flex flex-col overflow-hidden">
+            <div class="glass-panel p-4 md:p-6 w-full md:w-2/3 flex flex-col md:overflow-hidden min-h-[300px] md:min-h-0">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Mis Consultas 📚</h3>
                 <div id="student-queries-list" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                     <!-- Queries injected here -->
@@ -218,7 +218,7 @@
             </div>
 
             <!-- All Queries Panel -->
-            <div class="glass-panel p-6 flex-1 flex flex-col overflow-hidden">
+            <div class="glass-panel p-4 md:p-6 flex-1 flex flex-col md:overflow-hidden min-h-[400px] md:min-h-0">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Todas las Consultas 📬</h3>
                 <div id="teacher-queries-list" class="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
                     <!-- Queries injected here -->
