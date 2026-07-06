@@ -1,5 +1,10 @@
 /* styles.css */
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
 /* Background Gradient Animation */
 .bg-gradient {
     background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
